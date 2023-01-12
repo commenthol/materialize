@@ -17,7 +17,7 @@ Package.onUse(function (api) {
     'dist/js/materialize.js'
   ], 'client');
 
-  var scssFiles = [
+  let scssFiles = [
     'sass/components/forms/_checkboxes.scss',
     'sass/components/forms/_file-input.scss',
     'sass/components/forms/_forms.scss',

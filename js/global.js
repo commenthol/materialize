@@ -1,30 +1,8 @@
-// Required for Meteor package, the use of window prevents export by Meteor
-(function(window) {
-  if (window.Package) {
-    M = {};
-  } else {
-    window.M = {};
-  }
+import $ from './cash.js'
 
-  // Check for jQuery
-  M.jQueryLoaded = !!window.jQuery;
-})(window);
+const M = {}
 
-// AMD
-if (typeof define === 'function' && define.amd) {
-  define('M', [], function() {
-    return M;
-  });
-
-  // Common JS
-} else if (typeof exports !== 'undefined' && !exports.nodeType) {
-  if (typeof module !== 'undefined' && !module.nodeType && module.exports) {
-    exports = module.exports = M;
-  }
-  exports.default = M;
-}
-
-M.version = '1.0.0';
+M.version = '1.0.0'
 
 M.keys = {
   TAB: 9,
@@ -32,82 +10,82 @@ M.keys = {
   ESC: 27,
   ARROW_UP: 38,
   ARROW_DOWN: 40
-};
+}
 
 /**
  * TabPress Keydown handler
  */
-M.tabPressed = false;
-M.keyDown = false;
-let docHandleKeydown = function(e) {
-  M.keyDown = true;
+M.tabPressed = false
+M.keyDown = false
+const docHandleKeydown = function (e) {
+  M.keyDown = true
   if (e.which === M.keys.TAB || e.which === M.keys.ARROW_DOWN || e.which === M.keys.ARROW_UP) {
-    M.tabPressed = true;
+    M.tabPressed = true
   }
-};
-let docHandleKeyup = function(e) {
-  M.keyDown = false;
+}
+const docHandleKeyup = function (e) {
+  M.keyDown = false
   if (e.which === M.keys.TAB || e.which === M.keys.ARROW_DOWN || e.which === M.keys.ARROW_UP) {
-    M.tabPressed = false;
+    M.tabPressed = false
   }
-};
-let docHandleFocus = function(e) {
+}
+const docHandleFocus = function (e) {
   if (M.keyDown) {
-    document.body.classList.add('keyboard-focused');
+    document.body.classList.add('keyboard-focused')
   }
-};
-let docHandleBlur = function(e) {
-  document.body.classList.remove('keyboard-focused');
-};
-document.addEventListener('keydown', docHandleKeydown, true);
-document.addEventListener('keyup', docHandleKeyup, true);
-document.addEventListener('focus', docHandleFocus, true);
-document.addEventListener('blur', docHandleBlur, true);
+}
+const docHandleBlur = function (e) {
+  document.body.classList.remove('keyboard-focused')
+}
+document.addEventListener('keydown', docHandleKeydown, true)
+document.addEventListener('keyup', docHandleKeyup, true)
+document.addEventListener('focus', docHandleFocus, true)
+document.addEventListener('blur', docHandleBlur, true)
 
 /**
  * Initialize jQuery wrapper for plugin
  * @param {Class} plugin  javascript class
  * @param {string} pluginName  jQuery plugin name
  * @param {string} classRef  Class reference name
- */
-M.initializeJqueryWrapper = function(plugin, pluginName, classRef) {
-  jQuery.fn[pluginName] = function(methodOrOptions) {
+ *//*
+M.initializeJqueryWrapper = function (plugin, pluginName, classRef) {
+  jQuery.fn[pluginName] = function (methodOrOptions) {
     // Call plugin method if valid method name is passed in
     if (plugin.prototype[methodOrOptions]) {
-      let params = Array.prototype.slice.call(arguments, 1);
+      const params = Array.prototype.slice.call(arguments, 1)
 
       // Getter methods
       if (methodOrOptions.slice(0, 3) === 'get') {
-        let instance = this.first()[0][classRef];
-        return instance[methodOrOptions].apply(instance, params);
+        const instance = this.first()[0][classRef]
+        return instance[methodOrOptions].apply(instance, params)
       }
 
       // Void methods
-      return this.each(function() {
-        let instance = this[classRef];
-        instance[methodOrOptions].apply(instance, params);
-      });
+      return this.each(function () {
+        const instance = this[classRef]
+        instance[methodOrOptions].apply(instance, params)
+      })
 
       // Initialize plugin if options or no argument is passed in
     } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
-      plugin.init(this, arguments[0]);
-      return this;
+      plugin.init(this, arguments[0])
+      return this
     }
 
     // Return error if an unrecognized  method name is passed in
-    jQuery.error(`Method ${methodOrOptions} does not exist on jQuery.${pluginName}`);
-  };
-};
+    jQuery.error(`Method ${methodOrOptions} does not exist on jQuery.${pluginName}`)
+  }
+} */
 
 /**
  * Automatically initialize components
  * @param {Element} context  DOM Element to search within for components
  */
-M.AutoInit = function(context) {
+M.AutoInit = function (context) {
   // Use document.body if no context is given
-  let root = !!context ? context : document.body;
+  const root = context || document.body
 
-  let registry = {
+  const registry = {
     Autocomplete: root.querySelectorAll('.autocomplete:not(.no-autoinit)'),
     Carousel: root.querySelectorAll('.carousel:not(.no-autoinit)'),
     Chips: root.querySelectorAll('.chips:not(.no-autoinit)'),
@@ -126,46 +104,46 @@ M.AutoInit = function(context) {
     Timepicker: root.querySelectorAll('.timepicker:not(.no-autoinit)'),
     Tooltip: root.querySelectorAll('.tooltipped:not(.no-autoinit)'),
     FloatingActionButton: root.querySelectorAll('.fixed-action-btn:not(.no-autoinit)')
-  };
-
-  for (let pluginName in registry) {
-    let plugin = M[pluginName];
-    plugin.init(registry[pluginName]);
   }
-};
+
+  for (const pluginName in registry) {
+    const plugin = M[pluginName]
+    plugin.init(registry[pluginName])
+  }
+}
 
 /**
  * Generate approximated selector string for a jQuery object
  * @param {jQuery} obj  jQuery object to be parsed
  * @returns {string}
  */
-M.objectSelectorString = function(obj) {
-  let tagStr = obj.prop('tagName') || '';
-  let idStr = obj.attr('id') || '';
-  let classStr = obj.attr('class') || '';
-  return (tagStr + idStr + classStr).replace(/\s/g, '');
-};
+M.objectSelectorString = function (obj) {
+  const tagStr = obj.prop('tagName') || ''
+  const idStr = obj.attr('id') || ''
+  const classStr = obj.attr('class') || ''
+  return (tagStr + idStr + classStr).replace(/\s/g, '')
+}
 
 // Unique Random ID
-M.guid = (function() {
-  function s4() {
+M.guid = (function () {
+  function s4 () {
     return Math.floor((1 + Math.random()) * 0x10000)
       .toString(16)
-      .substring(1);
+      .substring(1)
   }
-  return function() {
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-  };
-})();
+  return function () {
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
+  }
+})()
 
 /**
  * Escapes hash from special characters
  * @param {string} hash  String returned from this.hash
  * @returns {string}
  */
-M.escapeHash = function(hash) {
-  return hash.replace(/(:|\.|\[|\]|,|=|\/)/g, '\\$1');
-};
+M.escapeHash = function (hash) {
+  return hash.replace(/(:|\.|\[|\]|,|=|\/)/g, '\\$1')
+}
 
 /**
  * Get closest ancestor that satisfies the condition
@@ -173,29 +151,29 @@ M.escapeHash = function(hash) {
  * @param {Function} condition  Function that given an ancestor element returns true or false
  * @returns {Element} Return closest ancestor or null if none satisfies the condition
  */
-M.getClosestAncestor = function(el, condition) {
-  let ancestor = el.parentNode;
+M.getClosestAncestor = function (el, condition) {
+  let ancestor = el.parentNode
   while (ancestor !== null && !$(ancestor).is(document)) {
     if (condition(ancestor)) {
-      return ancestor;
+      return ancestor
     }
-    ancestor = ancestor.parentNode;
+    ancestor = ancestor.parentNode
   }
-  return null;
-};
+  return null
+}
 
-M.elementOrParentIsFixed = function(element) {
-  let $element = $(element);
-  let $checkElements = $element.add($element.parents());
-  let isFixed = false;
-  $checkElements.each(function() {
+M.elementOrParentIsFixed = function (element) {
+  const $element = $(element)
+  const $checkElements = $element.add($element.parents())
+  let isFixed = false
+  $checkElements.each(function () {
     if ($(this).css('position') === 'fixed') {
-      isFixed = true;
-      return false;
+      isFixed = true
+      return false
     }
-  });
-  return isFixed;
-};
+  })
+  return isFixed
+}
 
 /**
  * @typedef {Object} Edges
@@ -220,55 +198,55 @@ M.elementOrParentIsFixed = function(element) {
  * @param {Number} offset  offset from edge that counts as exceeding
  * @returns {Edges}
  */
-M.checkWithinContainer = function(container, bounding, offset) {
-  let edges = {
+M.checkWithinContainer = function (container, bounding, offset) {
+  const edges = {
     top: false,
     right: false,
     bottom: false,
     left: false
-  };
+  }
 
-  let containerRect = container.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect()
   // If body element is smaller than viewport, use viewport height instead.
-  let containerBottom =
+  const containerBottom =
     container === document.body
       ? Math.max(containerRect.bottom, window.innerHeight)
-      : containerRect.bottom;
+      : containerRect.bottom
 
-  let scrollLeft = container.scrollLeft;
-  let scrollTop = container.scrollTop;
+  const scrollLeft = container.scrollLeft
+  const scrollTop = container.scrollTop
 
-  let scrolledX = bounding.left - scrollLeft;
-  let scrolledY = bounding.top - scrollTop;
+  const scrolledX = bounding.left - scrollLeft
+  const scrolledY = bounding.top - scrollTop
 
   // Check for container and viewport for each edge
   if (scrolledX < containerRect.left + offset || scrolledX < offset) {
-    edges.left = true;
+    edges.left = true
   }
 
   if (
     scrolledX + bounding.width > containerRect.right - offset ||
     scrolledX + bounding.width > window.innerWidth - offset
   ) {
-    edges.right = true;
+    edges.right = true
   }
 
   if (scrolledY < containerRect.top + offset || scrolledY < offset) {
-    edges.top = true;
+    edges.top = true
   }
 
   if (
     scrolledY + bounding.height > containerBottom - offset ||
     scrolledY + bounding.height > window.innerHeight - offset
   ) {
-    edges.bottom = true;
+    edges.bottom = true
   }
 
-  return edges;
-};
+  return edges
+}
 
-M.checkPossibleAlignments = function(el, container, bounding, offset) {
-  let canAlign = {
+M.checkPossibleAlignments = function (el, container, bounding, offset) {
+  const canAlign = {
     top: true,
     right: true,
     bottom: true,
@@ -277,101 +255,101 @@ M.checkPossibleAlignments = function(el, container, bounding, offset) {
     spaceOnRight: null,
     spaceOnBottom: null,
     spaceOnLeft: null
-  };
+  }
 
-  let containerAllowsOverflow = getComputedStyle(container).overflow === 'visible';
-  let containerRect = container.getBoundingClientRect();
-  let containerHeight = Math.min(containerRect.height, window.innerHeight);
-  let containerWidth = Math.min(containerRect.width, window.innerWidth);
-  let elOffsetRect = el.getBoundingClientRect();
+  const containerAllowsOverflow = getComputedStyle(container).overflow === 'visible'
+  const containerRect = container.getBoundingClientRect()
+  const containerHeight = Math.min(containerRect.height, window.innerHeight)
+  const containerWidth = Math.min(containerRect.width, window.innerWidth)
+  const elOffsetRect = el.getBoundingClientRect()
 
-  let scrollLeft = container.scrollLeft;
-  let scrollTop = container.scrollTop;
+  const scrollLeft = container.scrollLeft
+  const scrollTop = container.scrollTop
 
-  let scrolledX = bounding.left - scrollLeft;
-  let scrolledYTopEdge = bounding.top - scrollTop;
-  let scrolledYBottomEdge = bounding.top + elOffsetRect.height - scrollTop;
+  const scrolledX = bounding.left - scrollLeft
+  const scrolledYTopEdge = bounding.top - scrollTop
+  const scrolledYBottomEdge = bounding.top + elOffsetRect.height - scrollTop
 
   // Check for container and viewport for left
   canAlign.spaceOnRight = !containerAllowsOverflow
     ? containerWidth - (scrolledX + bounding.width)
-    : window.innerWidth - (elOffsetRect.left + bounding.width);
+    : window.innerWidth - (elOffsetRect.left + bounding.width)
   if (canAlign.spaceOnRight < 0) {
-    canAlign.left = false;
+    canAlign.left = false
   }
 
   // Check for container and viewport for Right
   canAlign.spaceOnLeft = !containerAllowsOverflow
     ? scrolledX - bounding.width + elOffsetRect.width
-    : elOffsetRect.right - bounding.width;
+    : elOffsetRect.right - bounding.width
   if (canAlign.spaceOnLeft < 0) {
-    canAlign.right = false;
+    canAlign.right = false
   }
 
   // Check for container and viewport for Top
   canAlign.spaceOnBottom = !containerAllowsOverflow
     ? containerHeight - (scrolledYTopEdge + bounding.height + offset)
-    : window.innerHeight - (elOffsetRect.top + bounding.height + offset);
+    : window.innerHeight - (elOffsetRect.top + bounding.height + offset)
   if (canAlign.spaceOnBottom < 0) {
-    canAlign.top = false;
+    canAlign.top = false
   }
 
   // Check for container and viewport for Bottom
   canAlign.spaceOnTop = !containerAllowsOverflow
     ? scrolledYBottomEdge - (bounding.height - offset)
-    : elOffsetRect.bottom - (bounding.height + offset);
+    : elOffsetRect.bottom - (bounding.height + offset)
   if (canAlign.spaceOnTop < 0) {
-    canAlign.bottom = false;
+    canAlign.bottom = false
   }
 
-  return canAlign;
-};
+  return canAlign
+}
 
-M.getOverflowParent = function(element) {
+M.getOverflowParent = function (element) {
   if (element == null) {
-    return null;
+    return null
   }
 
   if (element === document.body || getComputedStyle(element).overflow !== 'visible') {
-    return element;
+    return element
   }
 
-  return M.getOverflowParent(element.parentElement);
-};
+  return M.getOverflowParent(element.parentElement)
+}
 
 /**
  * Gets id of component from a trigger
  * @param {Element} trigger  trigger
  * @returns {string}
  */
-M.getIdFromTrigger = function(trigger) {
-  let id = trigger.getAttribute('data-target');
+M.getIdFromTrigger = function (trigger) {
+  let id = trigger.getAttribute('data-target')
   if (!id) {
-    id = trigger.getAttribute('href');
+    id = trigger.getAttribute('href')
     if (id) {
-      id = id.slice(1);
+      id = id.slice(1)
     } else {
-      id = '';
+      id = ''
     }
   }
-  return id;
-};
+  return id
+}
 
 /**
  * Multi browser support for document scroll top
  * @returns {Number}
  */
-M.getDocumentScrollTop = function() {
-  return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-};
+M.getDocumentScrollTop = function () {
+  return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
+}
 
 /**
  * Multi browser support for document scroll left
  * @returns {Number}
  */
-M.getDocumentScrollLeft = function() {
-  return window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0;
-};
+M.getDocumentScrollLeft = function () {
+  return window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0
+}
 
 /**
  * @typedef {Object} Edges
@@ -395,11 +373,11 @@ M.getDocumentScrollLeft = function() {
  * @type {function}
  * @return {number}
  */
-let getTime =
+const getTime =
   Date.now ||
-  function() {
-    return new Date().getTime();
-  };
+  function () {
+    return new Date().getTime()
+  }
 
 /**
  * Returns a function, that, when invoked, will only be triggered at most once
@@ -413,32 +391,34 @@ let getTime =
  * @param {Object=} options
  * @returns {Function}
  */
-M.throttle = function(func, wait, options) {
-  let context, args, result;
-  let timeout = null;
-  let previous = 0;
-  options || (options = {});
-  let later = function() {
-    previous = options.leading === false ? 0 : getTime();
-    timeout = null;
-    result = func.apply(context, args);
-    context = args = null;
-  };
-  return function() {
-    let now = getTime();
-    if (!previous && options.leading === false) previous = now;
-    let remaining = wait - (now - previous);
-    context = this;
-    args = arguments;
+M.throttle = function (func, wait, options) {
+  let context, args, result
+  let timeout = null
+  let previous = 0
+  options || (options = {})
+  const later = function () {
+    previous = options.leading === false ? 0 : getTime()
+    timeout = null
+    result = func.apply(context, args)
+    context = args = null
+  }
+  return function () {
+    const now = getTime()
+    if (!previous && options.leading === false) previous = now
+    const remaining = wait - (now - previous)
+    context = this
+    args = arguments
     if (remaining <= 0) {
-      clearTimeout(timeout);
-      timeout = null;
-      previous = now;
-      result = func.apply(context, args);
-      context = args = null;
+      clearTimeout(timeout)
+      timeout = null
+      previous = now
+      result = func.apply(context, args)
+      context = args = null
     } else if (!timeout && options.trailing !== false) {
-      timeout = setTimeout(later, remaining);
+      timeout = setTimeout(later, remaining)
     }
-    return result;
-  };
-};
+    return result
+  }
+}
+
+export default M

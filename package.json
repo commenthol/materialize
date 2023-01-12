@@ -1,24 +1,31 @@
 {
   "name": "materialize-css",
+  "version": "1.0.1-0",
   "description": "Builds Materialize distribution packages",
-  "author": "Alvin Wang, Alan Chang",
   "homepage": "http://materializecss.com/",
-  "version": "1.0.0",
-  "main": "dist/js/materialize.js",
-  "style": "dist/css/materialize.css",
-  "sass": "sass/materialize.scss",
-  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dogfalo/materialize/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/Dogfalo/materialize.git"
   },
-  "bugs": {
-    "url": "https://github.com/Dogfalo/materialize/issues"
-  },
+  "license": "MIT",
+  "author": "Alvin Wang, Alan Chang",
+  "style": "dist/css/materialize.css",
+  "files": [
+    "dist",
+    "extras",
+    "js/**/*.js",
+    "sass/**/*.scss",
+    "Gruntfile.js",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "grunt monitor",
-    "test": "grunt travis",
-    "precommit": "lint-staged"
+    "lint": "eslint --ext .js .",
+    "precommit": "lint-staged",
+    "test": "grunt travis"
   },
   "lint-staged": {
     "js/*.js": [
@@ -26,11 +33,17 @@
       "git add"
     ]
   },
-  "dependencies": {},
-  "engine": "node >= 6",
+  "dependencies": {
+    "animejs": "^3.2.1"
+  },
   "devDependencies": {
     "autoprefixer": "^7.1.1",
     "babel-preset-es2015": "^6.24.1",
+    "eslint": "^8.31.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.4",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
     "grunt": "^1.0.1",
     "grunt-babel": "^6.0.0",
     "grunt-banner": "^0.6.0",
@@ -59,12 +72,7 @@
     "phantomjs-prebuilt": "^2.1.14",
     "prettier": "^1.12.1"
   },
-  "files": [
-    "dist",
-    "extras",
-    "js/**/*.js",
-    "sass/**/*.scss",
-    "Gruntfile.js",
-    "LICENSE"
-  ]
+  "engine": "node >= 6",
+  "sass": "sass/materialize.scss",
+  "__main": "dist/js/materialize.js"
 }

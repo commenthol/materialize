@@ -101,7 +101,7 @@
       // Setup cross browser string
       this.xform = 'transform';
       ['webkit', 'Moz', 'O', 'ms'].every((prefix) => {
-        var e = prefix + 'Transform';
+        let e = prefix + 'Transform';
         if (typeof document.body.style[e] !== 'undefined') {
           this.xform = e;
           return false;
